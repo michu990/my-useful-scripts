@@ -418,7 +418,8 @@ sshfs_menu()
     TEMP_FOLDER_PATH="$DESKTOP_PATH/$TEMP_FOLDER_NAME"
 
     # Mount function
-    mount_sftp() {
+    mount_sftp()
+    {
         mkdir -p "$TEMP_FOLDER_PATH"
         if sshfs "$SFTP_USER@$SFTP_HOST:$SFTP_REMOTE_PATH" "$TEMP_FOLDER_PATH"; then
             echo -e "$(green "[SUKCES]") Zdalny folder został zamontowany w $(light_blue "$TEMP_FOLDER_PATH")"
@@ -428,7 +429,8 @@ sshfs_menu()
     }
 
     # Unmount function
-    unmount_sftp() {
+    unmount_sftp()
+    {
         if mount | grep -q "$TEMP_FOLDER_PATH"; then
             if fusermount -u "$TEMP_FOLDER_PATH" && rmdir "$TEMP_FOLDER_PATH"; then
                 echo -e "$(green "[SUKCES]") Folder został odmontowany i tymczasowy katalog usunięty"
