@@ -1,8 +1,6 @@
-# My Useful Scripts  
+# A collection of handy scripts that I use.   
 
-A collection of handy scripts that I use.  
-
-## 📜 Scripts  
+## Scripts  
 
 ### `main-menu.sh`  
 **All-in-one script** – A centralized menu for quick access to various functions.  
