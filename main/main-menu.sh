@@ -2,7 +2,7 @@
 
 # Command center
 # michu990
-# Version: 2.0
+# Version: 3.0
 
 # Style functions
 print_text()
@@ -541,19 +541,6 @@ security_main_menu()
     echo -e "$(green "00"). Wyjdź"
     draw_line "-"
     read -p "Wybierz: " choice
-    #Menu
-    case $choice in
-        1) clamav_menu ;;
-        2) run_rkhunter ;;
-        3) run_chkrootkit ;;
-        4) run_lynis ;;
-        5) system_tools_menu ;;
-        0) return ;;
-        00)
-            echo "Wychodzę..."
-            draw_line "-"
-            exit 0
-            ;;
         *) 
             echo -e "$(red "Nieprawidłowy wybór!")"
             sleep 1
@@ -569,7 +556,7 @@ clamav_menu()
     clear_history
     
     print_menu_header "Skanowanie antywirusowe ClamAV:"
-    echo -e "$(green "1"). Skanuj określony folder"
+    echo -e "$(green "1"). Skanuj wybrane dyski/foldery (interaktywny wybór)"
     echo -e "$(green "2"). Skanuj cały system"
     echo -e "$(green "3"). Skanuj bieżącą lokalizację"
     echo -e "$(green "4"). Skanuj nowe/zmodyfikowane pliki"
@@ -581,13 +568,177 @@ clamav_menu()
 
     case $choice in
         1)
-            read -p "Podaj ścieżkę folderu: " folder
-            if [ -d "$folder" ]; then
-                sudo clamscan -r --bell "$folder"
-                show_result
-            else
-                echo -e "$(red "Folder nie istnieje!")"
-            fi
+            # Dupe function
+            is_duplicate()
+            {
+                local path="$1"
+                for selected in "${selected_paths[@]}"; do
+                    if [[ "$path" == "$selected"* ]] || [[ "$selected" == "$path"* ]]; then
+                        echo -e "$(red "UWAGA: Wybrany folder jest już zawarty w innym wybranym folderze lub go zawiera:")"
+                        echo -e "$(red "Nowy folder: $path")"
+                        echo -e "$(red "Istniejący folder: $selected")"
+                        return 0
+                    fi
+                done
+                return 1
+            }
+
+            # Disk and folder select function
+            select_paths()
+            {
+                selected_paths=()
+                current_level=0
+                current_paths=()
+
+                # Mounted disks
+                get_mounted_disks()
+                {
+                    echo -e "$(green "Lista zamontowanych dysków:")"
+                    mapfile -t disks < <(sudo lsblk -o MOUNTPOINT -n -l | grep -v "^$\|^/boot\|^/home\|^[[:space:]]*$" | sort -u)
+                    for i in "${!disks[@]}"; do
+                        echo -e "$(green "$((i+1))"). ${disks[$i]}"
+                    done
+                    echo -e "$(green "0"). Zakończ wybór i rozpocznij skanowanie"
+                    echo -e "$(green "00"). Anuluj"
+                    draw_line "-"
+                }
+
+                # Folder content
+                show_folder_content()
+                {
+                    local path="$1"
+                    echo -e "$(green "=== Zawartość: $path ===")"
+                    mapfile -t content < <(sudo ls -1 "$path")
+                    for i in "${!content[@]}"; do
+                        if [ -d "$path/${content[$i]}" ]; then
+                            echo -e "$(green "$((i+1))"). ${content[$i]}/"
+                        else
+                            echo -e "$(light_blue "$((i+1))"). ${content[$i]}"
+                        fi
+                    done
+                    echo -e "$(green "0"). Wybierz ten folder"
+                    echo -e "$(green "00"). Wróć do poprzedniego poziomu"
+                    draw_line "-"
+                }
+
+                # Main loop
+                while true; do
+                    clear_history
+
+                    if [ $current_level -eq 0 ]; then
+                        get_mounted_disks
+                        read -p "Wybierz dysk (lub opcję): " selection
+
+                        case $selection in
+                            0)
+                                if [ ${#selected_paths[@]} -eq 0 ]; then
+                                    echo -e "$(red "Nie wybrano żadnych ścieżek do skanowania!")"
+                                    sleep 2
+                                    continue
+                                else
+                                    echo -e "$(green "Wybrane ścieżki do skanowania:")"
+                                    for path in "${selected_paths[@]}"; do
+                                        echo "- $path"
+                                    done
+                                    read -p "Czy chcesz rozpocząć skanowanie? [T/n] " confirm
+                                    if [[ "$confirm" =~ ^[Nn] ]]; then
+                                        continue
+                                    else
+                                        echo "Rozpoczynanie skanowania wybranych ścieżek..."
+                                        for path in "${selected_paths[@]}"; do
+                                            echo -e "\n$(green "=== Skanowanie: $path ===")"
+                                            sudo clamscan -r --bell "$path"
+                                            show_result
+                                        done
+                                        return
+                                    fi
+                                fi
+                                ;;
+                            00)
+                                return
+                                ;;
+                            *)
+                                if [[ "$selection" =~ ^[0-9]+$ ]] && [ "$selection" -ge 1 ] && [ "$selection" -le ${#disks[@]} ]; then
+                                    current_path="${disks[$((selection-1))]}"
+                                    current_level=1
+                                    current_paths=("$current_path")
+                                else
+                                    echo -e "$(red "Nieprawidłowy wybór!")"
+                                    sleep 1
+                                fi
+                                ;;
+                        esac
+                    else
+                        current_path="${current_paths[$((current_level-1))]}"
+                        show_folder_content "$current_path"
+                        read -p "Wybierz element (lub opcję): " selection
+
+                        case $selection in
+                            0)
+                                if is_duplicate "$current_path"; then
+                                    read -p "Czy na pewno chcesz dodać ten folder? [T/n] " confirm_dup
+                                    if [[ "$confirm_dup" =~ ^[Nn] ]]; then
+                                        sleep 1
+                                        continue
+                                    fi
+                                fi
+                                
+                                selected_paths+=("$current_path")
+                                echo -e "$(green "Dodano folder do skanowania: $current_path")"
+                                read -p "Czy chcesz dodać więcej folderów? [T/n] " add_more
+                                if [[ "$add_more" =~ ^[Nn] ]]; then
+                                    echo -e "$(green "Wybrane ścieżki do skanowania:")"
+                                    for path in "${selected_paths[@]}"; do
+                                        echo "- $path"
+                                    done
+                                    read -p "Czy chcesz rozpocząć skanowanie? [T/n] " confirm
+                                    if [[ "$confirm" =~ ^[Nn] ]]; then
+                                        selected_paths=()
+                                        continue
+                                    else
+                                        echo "Rozpoczynanie skanowania wybranych ścieżek..."
+                                        for path in "${selected_paths[@]}"; do
+                                            echo -e "\n$(green "=== Skanowanie: $path ===")"
+                                            sudo clamscan -r --bell "$path"
+                                            show_result
+                                        done
+                                        return
+                                    fi
+                                fi
+                                sleep 1
+                                ;;
+                            00)
+                                current_level=$((current_level-1))
+                                current_paths=("${current_paths[@]:0:$current_level}")
+                                ;;
+                            *)
+                                if [[ "$selection" =~ ^[0-9]+$ ]]; then
+                                    mapfile -t content < <(sudo ls -1 "$current_path")
+                                    if [ "$selection" -ge 1 ] && [ "$selection" -le ${#content[@]} ]; then
+                                        selected_item="${content[$((selection-1))]}"
+                                        new_path="$current_path/$selected_item"
+                                        if [ -d "$new_path" ]; then
+                                            current_level=$((current_level+1))
+                                            current_paths+=("$new_path")
+                                        else
+                                            echo -e "$(red "To nie jest folder!")"
+                                            sleep 1
+                                        fi
+                                    else
+                                        echo -e "$(red "Nieprawidłowy wybór!")"
+                                        sleep 1
+                                    fi
+                                else
+                                    echo -e "$(red "Nieprawidłowy wybór!")"
+                                    sleep 1
+                                fi
+                                ;;
+                        esac
+                    fi
+                done
+            }
+
+            select_paths
             ;;
         2)
             echo "Rozpoczynanie skanowania całego systemu..."
@@ -605,7 +756,7 @@ clamav_menu()
             show_result
             ;;
         5)
-            echo "Aktualizowanie sygnatur wirusów..."
+            echo "Aktualizowanie sygnatury wirusów..."
             sudo freshclam
             show_result
             ;;
