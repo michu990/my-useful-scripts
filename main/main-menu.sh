@@ -526,6 +526,40 @@ network_scanner_menu()
     read -p "Naciśnij Enter, aby kontynuować..."
 }
 
+# rkhunter menu
+run_rkhunter()
+{
+    echo "Aktualizowanie bazy rkhunter..."
+    sudo rkhunter --update
+    show_result
+    
+    echo "Rozpoczynanie skanowania..."
+    sudo rkhunter --check --sk
+    show_result
+    
+    read -p "Naciśnij Enter, aby kontynuować..."
+}
+
+# chrootkit menu
+run_chkrootkit()
+{
+    echo "Rozpoczynanie skanowania chkrootkit..."
+    sudo chkrootkit
+    show_result
+    
+    read -p "Naciśnij Enter, aby kontynuować..."
+}
+
+# Lynis menu
+run_lynis()
+{
+    echo "Rozpoczynanie audytu Lynis..."
+    sudo lynis audit system
+    show_result
+    
+    read -p "Naciśnij Enter, aby kontynuować..."
+}
+
 # Security functionality
 security_main_menu()
 {
@@ -801,40 +835,6 @@ clamav_menu()
     
     read -p "Naciśnij Enter, aby kontynuować..."
     clamav_menu
-}
-
-# rkhunter menu
-run_rkhunter()
-{
-    echo "Aktualizowanie bazy rkhunter..."
-    sudo rkhunter --update
-    show_result
-    
-    echo "Rozpoczynanie skanowania..."
-    sudo rkhunter --check --sk
-    show_result
-    
-    read -p "Naciśnij Enter, aby kontynuować..."
-}
-
-# chrootkit menu
-run_chkrootkit()
-{
-    echo "Rozpoczynanie skanowania chkrootkit..."
-    sudo chkrootkit
-    show_result
-    
-    read -p "Naciśnij Enter, aby kontynuować..."
-}
-
-# Lynis menu
-run_lynis()
-{
-    echo "Rozpoczynanie audytu Lynis..."
-    sudo lynis audit system
-    show_result
-    
-    read -p "Naciśnij Enter, aby kontynuować..."
 }
 
 # system tools menu
