@@ -541,7 +541,32 @@ security_main_menu()
     echo -e "$(green "00"). Wyjdź"
     draw_line "-"
     read -p "Wybierz: " choice
-        *) 
+       
+       case $choice in
+        1)
+            clamav_menu
+            ;;
+        2)
+            run_rkhunter
+            ;;
+        3)
+            run_chkrootkit
+            ;;
+        4)
+            run_lynis
+            ;;
+        5)
+            system_tools_menu
+            ;;
+        0)
+            return
+            ;;
+        00)
+            echo "Wychodzę..."
+            draw_line "-"
+            exit 0
+            ;;
+        *)
             echo -e "$(red "Nieprawidłowy wybór!")"
             sleep 1
             ;;
