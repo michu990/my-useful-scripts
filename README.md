@@ -1,5 +1,14 @@
-# my-useful-scripts
-Scripts that I use
-All in one script "main-menu.sh"
-LAN network scanner "scan.py"
-Dependencies script "dependencies.sh"
+# My Useful Scripts  
+
+A collection of handy scripts that I use.  
+
+## 📜 Scripts  
+
+### `main-menu.sh`  
+**All-in-one script** – A centralized menu for quick access to various functions.  
+
+### `scan.py`  
+**LAN network scanner** – Scans and analyzes devices on the local network.  
+
+### `dependencies.sh`  
+**Dependency installer** – Automates the setup of required packages and tools.
