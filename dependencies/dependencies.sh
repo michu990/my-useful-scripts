@@ -65,6 +65,7 @@ DEPENDENCIES=(
     "gawk"             # gawk
     "sed"              # sed
     "dpkg"             # dpkg
+    "find"             # find
 )
 
 print_success "Instalacja zakończona. Wymagane pakiety:"
