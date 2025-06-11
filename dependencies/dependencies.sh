@@ -66,6 +66,9 @@ DEPENDENCIES=(
     "sed"              # sed
     "dpkg"             # dpkg
     "find"             # find
+    "lsblk"            # lsblk
+    "grep"             # grep
+    "ls"               # ls lol
 )
 
 print_success "Instalacja zakończona. Wymagane pakiety:"
