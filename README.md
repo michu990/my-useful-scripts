@@ -9,4 +9,4 @@
 **LAN network scanner** – Scans and analyzes devices on the local network.  
 
 ### `dependencies.sh`  
-**Dependency installer** – Automates the setup of required packages and tools.
+**Dependency installer** – Automates the setup of required packages and tools. (Badly written, fix needed)
