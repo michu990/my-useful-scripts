@@ -1,12 +1,15 @@
-# A collection of handy scripts that I use.   
+# A collection of handy scripts that I use.
 
-## Scripts  
+## Scripts
 
-### `main-menu.sh`  
-**All-in-one script** – A centralized menu for quick access to various functions.  
+### `main-menu.sh`
+**All-in-one script** – A centralized menu for quick access to various functions.
 
-### `scan.py`  
-**LAN network scanner** – Scans and analyzes devices on the local network.  
+### `scan.py`
+**LAN network scanner** – Scans and analyzes devices on the local network.
 
-### `dependencies.sh`  
+### `swap.sh`
+**Swap shenanigans** - Useful to create fast swap file
+
+### `dependencies.sh`
 **Dependency installer** – Automates the setup of required packages and tools. (Badly written, fix needed)
