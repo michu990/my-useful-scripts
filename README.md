@@ -3,7 +3,7 @@
 ## Scripts
 
 ### `main-menu.sh`
-**All-in-one script** – A centralized menu for quick access to various functions.
+**All-in-one script** – A centralized menu for quick access to various functions. ***(unification needed)***
 
 ### `scan.py`
 **LAN network scanner** – Scans and analyzes devices on the local network.
@@ -12,4 +12,4 @@
 **Swap shenanigans** - Useful to create fast swap file
 
 ### `dependencies.sh`
-**Dependency installer** – Automates the setup of required packages and tools. (Badly written, fix needed)
+**Dependency installer** – Automates the setup of required packages and tools. ***(Badly written, fix needed)***
