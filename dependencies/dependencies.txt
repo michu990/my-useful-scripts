@@ -1,0 +1,73 @@
+    # Core system utilities
+    "bash"
+    "coreutils"
+    "grep"
+    "sed"
+    "awk"
+    "find"
+    "tar"
+    "gzip"
+    "mount"
+    "umount"
+    "fusermount"
+    "sudo"
+    "pv"
+    "printf"
+    "tr"
+    "tput"
+    "sleep"
+    "date"
+    "du"
+    "cut"
+    "sort"
+    "uniq"
+    "ps"
+    "net-tools"
+    "iproute2"
+    "ss"
+    "df"
+    "blkid"
+    "lsblk"
+    "util-linux"  #dd mkswap swapon swapoff
+    "systemd"
+    "dpkg"
+    "apt"
+    "apt-get"
+    "deborphan"
+
+    # Network tools
+    "openssh-client"
+    "openssh-server"
+    "sshfs"
+    "nmap"
+    "net-tools"
+    "iproute2"
+    "ufw"
+
+    # GUI dependencies
+    "gnome-terminal"
+    "xdg-utils"
+
+    # Security tools
+    "clamav"
+    "freshclam"
+    "rkhunter"
+    "chkrootkit"
+    "lynis"
+
+    # Python and libraries
+    "python3"
+    "python3-json"
+    "python3-xml"
+    "python3-datetime"
+    "python3-subprocess"
+    "python3-threading"
+    "python3-argparse"
+
+    # Virtualization
+    "libvirt"
+    "virtiofsd"
+    "fuse"
+
+    # VNC client
+    "tigervnc"
