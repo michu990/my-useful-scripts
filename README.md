@@ -1,6 +1,6 @@
 # A collection of handy scripts that I use.
 
-## Scripts
+## Scripts writen for Debian XFCE
 
 ### `main-menu.sh`
 **All-in-one script** – A centralized menu for quick access to various functions. ***(unification needed)***
