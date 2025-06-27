@@ -11,6 +11,12 @@
 ### `swap.sh`
 **Swap shenanigans** - Useful to create fast swap file.
 
+### `copy-libvirt.sh`
+**Copy folder content to user path**
+
+### `paste-libvirt.sh`
+**Paste folder content to /var/lib**
+
 ### `shared-memory.sh`
 **Folder between host and vm** - Adding flexible shared folder in vm.
 
