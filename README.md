@@ -14,5 +14,5 @@
 ### `shared-memory.sh`
 **Folder between host and vm** - Adding flexible shared folder in vm.
 
-### `dependencies.sh`
-**Dependency installer** – Automates the setup of required packages and tools. ***(Badly written, fix needed)***
+### `dependencies.txt`
+**List of required dependencies**
