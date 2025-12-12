@@ -1,8 +1,7 @@
 #!/bin/bash
 
-# VM copy-paste script
+# VM paste script
 # michu990
-# Version: 1.0
 
 # Check if running from desktop (GUI) - if yes, launch terminal
 if [ -n "$DESKTOP_SESSION" ] && [ -z "$TERMINAL_LAUNCHED" ]; then
