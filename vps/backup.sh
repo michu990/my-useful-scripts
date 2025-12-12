@@ -3,6 +3,7 @@
 # Weekly Backup Script for Apache & Home Directory
 # Run weekly via cron as root
 # Keeps maximum 4 backups (rotates old ones)
+# michu990
 
 # Configuration
 USER="michu990"
