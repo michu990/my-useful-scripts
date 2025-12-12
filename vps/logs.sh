@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Apache Log Summary Script
+# michu990
 
 # Configuration
 USER="michu990"
