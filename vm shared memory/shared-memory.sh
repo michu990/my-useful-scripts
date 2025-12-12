@@ -2,7 +2,6 @@
 
 # VM shared memory script
 # michu990
-# Version: 1.0
 
 MOUNT_SOURCE="shared"
 MOUNT_POINT="/mnt/shared"
@@ -11,28 +10,28 @@ DESKTOP_LINK="$HOME/Desktop/shared_folder"  # Dla XFCE
 function check_mount_status()
 {
     if mountpoint -q "$MOUNT_POINT"; then
-        return 0  # zamontowane
+        return 0  # mounted
     else
-        return 1  # niezamontowane
+        return 1  # unmounted
     fi
 }
 
 function create_desktop_link()
 {
     if [ -L "$DESKTOP_LINK" ]; then
-        echo "Symboliczny link już istnieje."
+        echo "Symbolic link exists."
         return 0
     fi
     
-    echo "Tworzę symboliczny link na pulpicie..."
+    echo "Creating symbolic link on desktop..."
     ln -s "$MOUNT_POINT" "$DESKTOP_LINK" 2>/dev/null
     
     if [ $? -eq 0 ]; then
         chmod 755 "$DESKTOP_LINK"
-        echo "Utworzono link: $DESKTOP_LINK"
+        echo "Link created: $DESKTOP_LINK"
         return 0
     else
-        echo "Błąd: Nie udało się utworzyć linku!"
+        echo "Error: The link could not be created!"
         return 1
     fi
 }
@@ -40,58 +39,58 @@ function create_desktop_link()
 function remove_desktop_link()
 {
     if [ -L "$DESKTOP_LINK" ]; then
-        echo "Usuwam symboliczny link z pulpitu..."
+        echo "Removing the symbolic link from the desktop...."
         rm -f "$DESKTOP_LINK"
-        [ ! -L "$DESKTOP_LINK" ] && echo "Link usunięty pomyślnie."
+        [ ! -L "$DESKTOP_LINK" ] && echo "Link successfully removed."
     else
-        echo "Link nie istnieje."
+        echo "The link does not exist."
     fi
 }
 
 function mount_folder()
 {
     if check_mount_status; then
-        echo "Folder jest już podłączony."
+        echo "Folder is already mounted."
         create_desktop_link
         return
     fi
     
     if [ ! -d "$MOUNT_POINT" ]; then
-        echo "Tworzę punkt montowania $MOUNT_POINT..."
+        echo "Creating mount point $MOUNT_POINT..."
         sudo mkdir -p "$MOUNT_POINT" ||
         {
-            echo "Błąd: Nie udało się utworzyć katalogu!"
+            echo "Error: Failed to create directory!"
             return 1
         }
     fi
     
-    echo "Podłączam folder..."
+    echo "Mounting folder..."
     sudo mount -t virtiofs "$MOUNT_SOURCE" "$MOUNT_POINT"
     
     if check_mount_status; then
-        echo "Folder został pomyślnie podłączony."
+        echo "Folder has been mounted."
         create_desktop_link
     else
-        echo "Błąd: Nie udało się podłączyć folderu."
+        echo "Error: Failed to mount folder."
     fi
 }
 
 function unmount_folder()
 {
     if ! check_mount_status; then
-        echo "Folder nie jest podłączony."
+        echo "Folder is not mounted."
         remove_desktop_link
         return
     fi
     
-    echo "Odłączam folder..."
+    echo "Unmounting folder..."
     sudo umount "$MOUNT_POINT"
     
     if ! check_mount_status; then
-        echo "Folder został pomyślnie odłączony."
+        echo "Folder unmounted successfully."
         remove_desktop_link
     else
-        echo "Błąd: Nie udało się odłączyć folderu."
+        echo "Error: Failed to unmount folder."
     fi
 }
 
@@ -99,17 +98,17 @@ function show_status()
 {
     echo "===== STATUS ====="
     if check_mount_status; then
-        echo -e "Montowanie: \e[32mPODŁĄCZONY\e[0m"
+        echo -e "Mounting: \e[32mMOUNTED\e[0m"
     else
-        echo -e "Montowanie: \e[31mODŁĄCZONY\e[0m"
+        echo -e "Mounting: \e[31mUNMOUNTED\e[0m"
     fi
     
     if [ -L "$DESKTOP_LINK" ]; then
-        echo -e "Link na pulpicie: \e[32mISTNIEJE\e[0m"
-        echo "Ścieżka linku: $DESKTOP_LINK"
-        echo "Wskazuje na: $(readlink -f "$DESKTOP_LINK")"
+        echo -e "Desktop link: \e[32mEXIST\e[0m"
+        echo "Link path: $DESKTOP_LINK"
+        echo "Shows: $(readlink -f "$DESKTOP_LINK")"
     else
-        echo -e "Link na pulpicie: \e[31mBRAK\e[0m"
+        echo -e "Desktop link: \e[31mNULL\e[0m"
     fi
     echo "=================="
 }
@@ -117,18 +116,18 @@ function show_status()
 while true; do
     clear
     echo "==========================================="
-    echo " MENU ZARZĄDZANIA FOLDEREM WSPÓLNYM"
+    echo " Shared Folder"
     echo "==========================================="
     show_status
     echo "-------------------------------------------"
-    echo "1. Podłącz folder (ze stworzeniem linku)"
-    echo "2. Odłącz folder (z usunięciem linku)"
-    echo "3. Tylko stwórz link na pulpicie"
-    echo "4. Tylko usuń link z pulpitu"
-    echo "5. Sprawdź status"
-    echo "6. Wyjście"
+    echo "1. Connect folder (with link creation)"
+    echo "2. Disconnect folder (with link removal)"
+    echo "3. Only create link on desktop"
+    echo "4. Only remove link from desktop"
+    echo "5. Check status"
+    echo "6. Exit"
     echo "-------------------------------------------"
-    read -p "Wybierz: " choice
+    read -p "Choose: " choice
     
     case $choice in
         1) mount_folder ;;
@@ -136,9 +135,9 @@ while true; do
         3) create_desktop_link ;;
         4) remove_desktop_link ;;
         5) show_status ;;
-        6) echo "Zamykanie skryptu..."; exit 0 ;;
-        *) echo "Nieprawidłowy wybór. Wybierz 1-6." ;;
+        6) echo "Exiting..."; exit 0 ;;
+        *) echo "Wrong choice. Select 1-6." ;;
     esac
     
-    read -p "Naciśnij Enter, aby kontynuować..." _
+    read -p "Press Enter to continue..." _
 done
