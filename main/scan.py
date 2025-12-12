@@ -1,6 +1,5 @@
 # Network scanner
 # michu990
-# Version: 1.0
 
 import json
 import os
