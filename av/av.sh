@@ -187,19 +187,6 @@ run_lynis() {
     echo "Lynis will perform a comprehensive system audit"
     echo ""
     
-    # Check if lynis is available
-    if ! command -v lynis &> /dev/null; then
-        echo "Lynis is not installed. Would you like to install it? (y/n)"
-        read -p "Choice: " install_choice
-        if [ "$install_choice" = "y" ] || [ "$install_choice" = "Y" ]; then
-            echo "Installing Lynis..."
-            sudo apt update && sudo apt install -y lynis
-        else
-            echo "Returning to main menu..."
-            return
-        fi
-    fi
-    
     echo "Select scan type:"
     echo "1. Quick audit"
     echo "2. Full audit"
