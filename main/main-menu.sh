@@ -1,8 +1,7 @@
 #!/bin/bash
 
-# Command center
+# Main script
 # michu990
-# Version: 3.0
 
 # Style functions
 print_text()
