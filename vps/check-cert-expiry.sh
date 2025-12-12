@@ -1,4 +1,8 @@
 #!/bin/bash
+
+# Simple check for certificate expiry date
+# michu990
+
 echo "Checking SSL certificate expiry..."
 
 # Check each certificate
