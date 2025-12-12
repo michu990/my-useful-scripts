@@ -5,7 +5,7 @@
 
 MOUNT_SOURCE="shared"
 MOUNT_POINT="/mnt/shared"
-DESKTOP_LINK="$HOME/Desktop/shared_folder"  # Dla XFCE
+DESKTOP_LINK="$HOME/Desktop/shared_folder"
 
 function check_mount_status()
 {
