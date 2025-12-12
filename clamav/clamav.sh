@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# AV menu script
+# michu990
+
 echo "ClamAV database update"
 
 # Stopping freshclam
