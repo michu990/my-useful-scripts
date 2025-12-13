@@ -135,7 +135,7 @@ backup_critical_configs() {
     echo "3. Always Use HTTPS: ON" >> "${critical_dir}/cloudflare/README.txt"
     
     # Compress critical configs
-    tar -czf "${BACKUP_DIR}/critical_configs_${DATE}.tar.gz" -C "${BACKUP_DIR}" "critical_configs_${DATE}"
+    tar -czpf "${BACKUP_DIR}/critical_configs_${DATE}.tar.gz" -C "${BACKUP_DIR}" "critical_configs_${DATE}"
     rm -rf "${critical_dir}"
     
     log_message "Critical configurations backup created: critical_configs_${DATE}.tar.gz"
@@ -213,7 +213,7 @@ check_cert_expiry
 log_message "Creating main backup archive..."
 cd /  # Change to root to use relative paths in tar
 
-if tar -czf "${BACKUP_DIR}/${BACKUP_NAME}" \
+if tar -czpf "${BACKUP_DIR}/${BACKUP_NAME}" \
     "${EXCLUDE_PATTERNS[@]}" \
     --warning=no-file-changed \
     "${BACKUP_SOURCES[@]}" 2>> "$LOG_FILE"; then
