@@ -309,12 +309,12 @@ Date: $(date)
 MAIN BACKUP: ${BACKUP_NAME}
 
 To restore:
+# Extracting must be done by root!!!
+1. Extract main backup (by root!!!):
+   sudo tar -xzf ${BACKUP_NAME} -C /
 
-1. Extract main backup:
-   tar -xzf ${BACKUP_NAME} -C /
-
-2. Critical configurations (if needed separately):
-   tar -xzf critical_configs_${DATE}.tar.gz -C /
+2. Critical configurations (if needed separately, extract by root!!!):
+   sudo tar -xzf critical_configs_${DATE}.tar.gz -C /
 
 3. Important services to restart after restore:
    sudo systemctl restart apache2
