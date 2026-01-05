@@ -213,7 +213,10 @@ check_cert_expiry
 log_message "Creating main backup archive..."
 cd /  # Change to root to use relative paths in tar
 
+
+## Here root fails to do backup --> fixed by (-C / \)
 if tar -czpf "${BACKUP_DIR}/${BACKUP_NAME}" \
+    -C / \
     "${EXCLUDE_PATTERNS[@]}" \
     --warning=no-file-changed \
     "${BACKUP_SOURCES[@]}" 2>> "$LOG_FILE"; then
