@@ -9,7 +9,7 @@ if [ "$EUID" -ne 0 ]; then
 fi
 
 HTPASSWD_FILE="/etc/apache2/.htpasswd"
-USERNAME="piwnica"
+USERNAME=""
 
 echo "Changing password for user: $USERNAME"
 
